@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const app = express();
 const port = process.env.PORT || 3000
-
+const path = require('path')
 const session = require('express-session')
 const passport = require('passport')
 require('./strategies/discordStrategy')
@@ -35,7 +35,8 @@ app.use('/auth/discord',router)
 
 app.get('/',(req,res)=>{
     console.log(req.user);
-    res.status(200).send(req.user)
+    // res.status(200).send(req.user)
+    res.sendFile(path.join(__dirname,'/public/index.html'))
 })
 
 

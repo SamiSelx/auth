@@ -6,14 +6,9 @@
     <title>Document</title>
 </head>
 <body>
-    <button class="btn">click</button>
+    <a href='/auth/discord'>auth</a>
     <script>
-        let btn = document.querySelector(".btn")
-        btn.addEventListener('click',async ()=>{
-            const data= await fetch('http://localhost:5000/auth/discord/redirect')
-            const res = await data
-            console.log(res);
-        })
+      
     </script>
 </body>
 </html>
