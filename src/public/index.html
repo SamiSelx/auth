@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button class="btn">click</button>
+    <script>
+        let btn = document.querySelector(".btn")
+        btn.addEventListener('click',async ()=>{
+            const data= await fetch('http://localhost:5000/auth/discord/redirect')
+            const res = await data
+            console.log(res);
+        })
+    </script>
+</body>
+</html>
