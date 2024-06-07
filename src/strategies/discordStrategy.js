@@ -1,14 +1,17 @@
 const {Strategy} = require('passport-discord')
 const passport = require('passport')
 
+let user = {}
+
 passport.serializeUser((user,done)=>{
     console.log("serializaing : ",user);
     done(null,user.id)
 })
 
 passport.deserializeUser((id,done)=>{
-    console.log("deserializeUser");
-    done(null,id) // store id to req.user ,,  i'll change it and attach user and getting info from DB
+    console.log("deserializeUser",id);
+
+    done(null,user) // store id to req.user ,,  i'll change it and attach user and getting info from DB
 })
 
 passport.use(new Strategy({
@@ -24,7 +27,7 @@ async (accessToken,refreshToken,profile,done)=>{
 
     if(mcGuild) {
         console.log("user on discord : ",mcGuild.name);
-        const user = {
+         user = {
             id:profile.id,
             username: profile.username,
             status: "success"
@@ -32,7 +35,7 @@ async (accessToken,refreshToken,profile,done)=>{
         done(null,user)
     }
     else {
-        const user = {
+         user = {
             id:profile.id,
             username: profile.username,
             status: "failed"

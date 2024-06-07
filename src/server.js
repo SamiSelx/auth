@@ -7,8 +7,8 @@ const session = require('express-session')
 const passport = require('passport')
 require('./strategies/discordStrategy')
 // Routes
-const router = require('./routes/discordAPI')
-
+const discordApiRouter = require('./routes/discordAPI')
+const ApiConfigurationRouter = require('./routes/ApiConfiguration')
 
 app.use(session({
     secret:'sam secret',
@@ -30,11 +30,13 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 
 
-app.use('/auth/discord',router)
-
+app.use('/auth/discord',discordApiRouter)
+app.use('/',ApiConfigurationRouter)
 
 app.get('/',(req,res)=>{
-    console.log(req.user);
+    console.log("from /: ",req.user);
+    req.user?.status == "failed" ? res.clearCookie('discord-auth') : null
+    
     // res.status(200).send(req.user)
     res.sendFile(path.join(__dirname,'/public/index.html'))
 })
