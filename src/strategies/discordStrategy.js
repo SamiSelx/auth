@@ -1,17 +1,20 @@
 const {Strategy} = require('passport-discord')
 const passport = require('passport')
-
-let user = {}
+const mongoose = require('mongoose')
+const DiscordUserModel = require('../models/discordUser.model')
+// let user = {}
 
 passport.serializeUser((user,done)=>{
     console.log("serializaing : ",user);
-    done(null,user.id)
+    done(null,user._id)
 })
 
-passport.deserializeUser((id,done)=>{
-    console.log("deserializeUser",id);
+passport.deserializeUser(async (_id,done)=>{
+    console.log("deserializeUser",_id);
 
-    done(null,user) // store id to req.user ,,  i'll change it and attach user and getting info from DB
+    const user = await DiscordUserModel.findOne({_id:_id})
+    console.log(user);
+    user ? done(null,user) : done(null,{_id:_id,status:"failed"})
 })
 
 passport.use(new Strategy({
@@ -22,25 +25,34 @@ passport.use(new Strategy({
 },
 async (accessToken,refreshToken,profile,done)=>{
     console.log(accessToken,refreshToken);
-
+    console.log("annuler",profile);
     const mcGuild = profile.guilds.find(guild => guild.id == "505471440250994718")
 
-    if(mcGuild) {
-        console.log("user on discord : ",mcGuild.name);
-         user = {
-            id:profile.id,
-            username: profile.username,
-            status: "success"
+    try {
+        if(mcGuild) {
+            console.log("user on discord : ",mcGuild.name);
+            const user = {
+                _id:profile.id,
+                username: profile.username,
+                status: "success"
+            }
+            const findUser = await DiscordUserModel.findById(user._id)
+            if(!findUser) {
+                await DiscordUserModel.create(user)
+            }
+            done(null,user)
         }
-        done(null,user)
-    }
-    else {
-         user = {
-            id:profile.id,
-            username: profile.username,
-            status: "failed"
+        else {
+            const user = {
+                _id:profile.id,
+                username: profile.username,
+                status: "failed"
+            }
+            done(null,user)
         }
-        done(null,user)
+    } catch (err) {
+        console.log(err);
+        done(err,null)
     }
 }
 ))

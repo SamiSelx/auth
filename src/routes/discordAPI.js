@@ -11,9 +11,12 @@ router.get('/redirect',passport.authenticate('discord',{
     failureRedirect:'/',
     // successRedirect:'/registre'
 }),(req,res)=>{
-    console.log(req.user);
-    req.user.status == "success" ? res.redirect('/registre') : res.redirect('/')
+    console.log("inside redirect",req.user);
+    req.user?.status == "success" ? res.redirect('/registre') : res.redirect('/')
+
     // res.send(req.user)
+
+
 })
 
 module.exports = router

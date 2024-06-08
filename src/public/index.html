@@ -8,9 +8,43 @@
 <body>
     <a href='/auth/discord'>auth</a>
     <button class="btn">click</button>
+    <form>
+        <input class="fullname" placeholder="fullname"/>
+        <input class="email" placeholder="email" />
+        <input class="numberPhone" type="number" placeholder="numberPhone">
+        <input class="motivation" placeholder="motivation" />
+        <input type="submit" value="send" class="btn_submit">
+    </form>
     <script>
-    const btn = document.querySelector("btn")
-    
+    const btn = document.querySelector("form .btn_submit")
+    const fullname = document.querySelector('form .fullname')
+    const email = document.querySelector('form .email')
+    const numberPhone = document.querySelector('form .numberPhone')
+    const motivation = document.querySelector('form .motivation')
+    document.querySelector('form').addEventListener('submit',(e)=>{e.preventDefault()})
+    btn.addEventListener('click',async ()=>{
+        // console.log(fullname.value,email.value,numberPhone.value,motivation.value)
+        const body = {
+            fullName:fullname.value,
+            email:email.value,
+            phoneNumber:numberPhone.value,
+            motivation:motivation.value
+        }
+        try {
+            console.log(body);
+            const response = await fetch('http://localhost:5000/registre',{
+                method:"POST",
+                body:JSON.stringify(body),
+                headers:{
+                    "content-type":"application/json"
+                }
+            })
+            
+            console.log(response.json());
+        } catch (error) {
+            console.log(error);
+        }
+    })
     </script>
 </body>
 </html>
