@@ -1,25 +1,18 @@
 const express = require('express')
 const router = express.Router()
 const {isAuthorized} = require('../middleware/isAuthorized')
-const mongoose = require('mongoose')
 const UserModel = require('../models/user.model')
 
 
 router.get('/registre',isAuthorized,(req,res)=>{
-    console.log("from registre",req.user);
-    // req.user?.status == "failed" ? res.redirect('/') : res.send(200)
     res.send(200)
-    
 })
 
-router.post('/registre',isAuthorized, async(req,res)=>{
-    console.log("hey");
-    // if(req.user == "failed"){
-    //     res.redirect('/')
-    //     res.end()
-    //     return
-    // }
-    console.log(req.body);
+router.post('/registre', async(req,res)=>{
+    if(!req.user || req.user?.status == "failed"){
+        res.status(401).json({status:"failed",message:"failed to added on DB",error: "u should be authorized"})
+        return
+    }
     try {
         const newUser = await UserModel.create(req.body)
         res.status(200).json({status:"success",message:"data was successfully added",data:newUser})
@@ -28,8 +21,6 @@ router.post('/registre',isAuthorized, async(req,res)=>{
     }
     
 })
-
-
 
 
 module.exports = router

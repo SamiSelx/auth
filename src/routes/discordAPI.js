@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 const passport = require('passport')
 
-console.log("route");
 router.get('/',passport.authenticate('discord'),(req,res)=>{
     res.send(200)
 })
@@ -15,7 +14,6 @@ router.get('/redirect',passport.authenticate('discord',{
     req.user?.status == "success" ? res.redirect('/registre') : res.redirect('/')
 
     // res.send(req.user)
-
 
 })
 

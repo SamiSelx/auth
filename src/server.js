@@ -3,16 +3,15 @@ const express = require('express')
 const app = express();
 const mongoose = require('mongoose')
 const port = process.env.PORT || 3000
-const path = require('path')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
 const passport = require('passport')
-const clearSession = require('./controllers/clearSession')
 require('./strategies/discordStrategy')
 
 // Routes
 const discordApiRouter = require('./routes/discordAPI')
-const ApiConfigurationRouter = require('./routes/ApiConfiguration')
+const mainRouter = require('./routes/main')
+const userRouter = require('./routes/user.route.')
 
 const URI_MONGO = process.env.URI_MONGO
 
@@ -44,35 +43,8 @@ app.use(express.json())
 
 
 app.use('/auth/discord',discordApiRouter)
-app.use('/',ApiConfigurationRouter)
-
-app.get('/',async (req,res)=>{
-    console.log("from /: ",req.user);
-    // req.user?.status == "failed" ? res.clearCookie('discord-auth') : null //clearSession(req.id,res)
-    if(req.user?.status == "failed"){
-        console.log("inside failed");
-        res.clearCookie('discord-auth')
-        const collection = mongoose.connection.db.collection('sessions')
-        const results = await collection.find({}).toArray()
-        const session = results.find(result=> {
-            console.log("inside reduce: ",result,JSON.parse(result.session).passport.user,req.user._id);
-            if(JSON.parse(result.session).passport.user == req.user._id) return result
-            
-        })
-        console.log("collect",session);
-        const deleteSession = await collection.deleteOne({_id:session?._id})
-        
-        // res.clearCookie('discord-auth')
-    }
-    console.log(req.user);
-    
-    // const deleteSession = await collection.deleteOne({session: JSON.parse(res.session).passport.user == req.id}) we can do with regexp
-    // console.log("delete result : ",deleteSession);
-    // res.status(200).send(req.user)
-    res.sendFile(path.join(__dirname,'/public/index.html'))
-    
-})
-
+app.use('/',userRouter)
+app.use('/',mainRouter)
 
 
 
