@@ -11,10 +11,18 @@ declare global {
       interface User {
         _id: string;
         username?: string;
-        status?: string;
+        status: string;
+        isRegistred?:boolean;
       }
     }
-  }
+}
+
+// interface User {
+//     _id: string;
+//     username?: string;
+//     status: string;
+//     isRegistred?:boolean;
+// }
 
 passport.serializeUser((user,done)=>{
     console.log("serializaing : ",user);
@@ -42,7 +50,8 @@ async (accessToken,refreshToken,profile:Strategy.Profile,done)=>{
             const user:DiscordUserI = {
                 _id:profile.id,
                 username: profile.username,
-                status: "success"
+                status: "success",
+                isRegistred:false
             }
             const findUser = await DiscordUserModel.findById(user._id)
             if(!findUser) {
@@ -54,7 +63,8 @@ async (accessToken,refreshToken,profile:Strategy.Profile,done)=>{
             const user:DiscordUserI = {
                 _id:profile.id,
                 username: profile.username,
-                status: "failed"
+                status: "failed",
+                isRegistred:false
             }
             done(null,user)
         }

@@ -15,6 +15,10 @@ const DiscordUserSchema = new Schema(
       type: String,
       required: true,
     },
+    isRegistred:{
+      type:Boolean,
+      required:true,
+    }
   },
   {
     _id: false,

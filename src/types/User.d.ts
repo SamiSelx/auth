@@ -9,6 +9,7 @@ export interface UserI{
 export interface DiscordUserI{
     _id:string,
     username:string,
-    status:string
+    status:string,
+    isRegistred:boolean
   }
   
