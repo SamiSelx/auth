@@ -1,6 +1,7 @@
-const mongoose = require('mongoose')
+import {Schema, model} from 'mongoose'
+import type {UserI} from '../types/User'
 
-const UserSchema = mongoose.Schema(
+const UserSchema = new Schema(
     {
         fullName:{
             type: String,
@@ -11,7 +12,7 @@ const UserSchema = mongoose.Schema(
             required:true
         },
         phoneNumber: {
-            type:Number,
+            type:String,
             required:true
         },
         motivation: {
@@ -24,6 +25,6 @@ const UserSchema = mongoose.Schema(
     }
 )
 
-const UserModel = mongoose.model('User',UserSchema)
+const UserModel = model<UserI>('User',UserSchema)
 
-module.exports = UserModel
+export default UserModel

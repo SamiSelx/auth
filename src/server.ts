@@ -1,19 +1,21 @@
-require('dotenv').config()
-const express = require('express')
+import express from "express";
+import mongoose from 'mongoose'
+import session from 'express-session'
+import MongoStore from "connect-mongo";
+import  passport  from "passport";
+import './strategies/discordStrategy'
+import dotenv from 'dotenv'
+
+dotenv.config()
 const app = express();
-const mongoose = require('mongoose')
 const port = process.env.PORT || 3000
-const session = require('express-session')
-const MongoStore = require('connect-mongo')
-const passport = require('passport')
-require('./strategies/discordStrategy')
 
 // Routes
-const discordApiRouter = require('./routes/discordAPI')
-const mainRouter = require('./routes/main')
-const userRouter = require('./routes/user.route.')
+import discordApiRouter from './routes/discordAPI'
+import mainRouter from './routes/main'
+import userRouter from './routes/user.route'
 
-const URI_MONGO = process.env.URI_MONGO
+const URI_MONGO:string = process.env.URI_MONGO!
 
 mongoose.connect(URI_MONGO)
 .then(()=> console.log("Mongo connected"))

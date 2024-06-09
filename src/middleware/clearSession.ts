@@ -1,7 +1,8 @@
-const mongoose = require('mongoose')
-const path = require('path')
+import mongoose from "mongoose";
+import path from 'path'
+import  type { Request,Response ,NextFunction} from "express";
 
-const clearSession =  async (req,res,next)=>{
+const clearSession =  async (req:Request,res:Response,next: NextFunction)=>{
     console.log("from /: ",req.user);
     // req.user?.status == "failed" ? res.clearCookie('discord-auth') : null //clearSession(req.id,res)
     if(req.user?.status == "failed"){
@@ -9,7 +10,7 @@ const clearSession =  async (req,res,next)=>{
         const collection = mongoose.connection.db.collection('sessions')
         const results = await collection.find({}).toArray()
         const session = results.find(result=> {
-            if(JSON.parse(result.session).passport.user == req.user._id) return result
+            if(JSON.parse(result.session).passport.user == req.user?._id) return result
             
         })
         console.log("collect",session);
@@ -24,4 +25,4 @@ const clearSession =  async (req,res,next)=>{
     res.sendFile(path.join(__dirname,'../public/index.html'))
 }
 
-module.exports = clearSession
+export default clearSession

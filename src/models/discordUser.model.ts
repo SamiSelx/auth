@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const {Schema} = require('mongoose')
+import {Schema, model} from 'mongoose'
+import type { DiscordUserI } from '../types/User';
 
 const DiscordUserSchema = new Schema(
   {
@@ -22,6 +22,6 @@ const DiscordUserSchema = new Schema(
 );
 
 
-const DiscordUserModel = mongoose.model('DiscordUser',DiscordUserSchema)
+const DiscordUserModel = model<DiscordUserI>('DiscordUser',DiscordUserSchema)
 
-module.exports = DiscordUserModel
+export default DiscordUserModel

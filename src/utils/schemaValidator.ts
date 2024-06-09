@@ -1,4 +1,4 @@
-const Joi = require('joi')
+import Joi from 'joi'
 
 const userValidator = Joi.object({
     fullName:Joi.string().required(),
@@ -7,4 +7,4 @@ const userValidator = Joi.object({
     motivation: Joi.string().required()
 })
 
-module.exports = {userValidator}
+export {userValidator}                                                                                                                  

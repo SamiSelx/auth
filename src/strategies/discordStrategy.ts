@@ -1,32 +1,45 @@
-const {Strategy} = require('passport-discord')
-const passport = require('passport')
-const DiscordUserModel = require('../models/discordUser.model')
+// const {Strategy} = require('passport-discord')
+import {Strategy} from "passport-discord";
+import passport from "passport";
+import DiscordUserModel from '../models/discordUser.model'
+import type { DiscordUserI } from "../types/User";
+import dotenv from 'dotenv'
+dotenv.config()
 
+declare global {
+    namespace Express {
+      interface User {
+        _id: string;
+        username?: string;
+        status?: string;
+      }
+    }
+  }
 
 passport.serializeUser((user,done)=>{
     console.log("serializaing : ",user);
     done(null,user._id)
 })
 
-passport.deserializeUser(async (_id,done)=>{
+passport.deserializeUser(async (_id:string,done)=>{
     console.log("deserializeUser",_id);
     const user = await DiscordUserModel.findOne({_id:_id})
     user ? done(null,user) : done(null,{_id:_id,status:"failed"})
 })
 
 passport.use(new Strategy({
-    clientID:process.env.CLIENT_ID,
-    clientSecret:process.env.CLIENT_SECRET,
+    clientID: process.env.CLIENT_ID!,
+    clientSecret:process.env.CLIENT_SECRET!,
     callbackURL:'http://localhost:5000/auth/discord/redirect',
     scope:['identify','guilds']
 },
-async (accessToken,refreshToken,profile,done)=>{
-    const mcGuild = profile.guilds.find(guild => guild.id == "505471440250994718")
+async (accessToken,refreshToken,profile:Strategy.Profile,done)=>{
+    const mcGuild = profile.guilds?.find(guild => guild.id == "505471440250994718")
 
     try {
         if(mcGuild) {
             console.log("user on discord : ",mcGuild.name);
-            const user = {
+            const user:DiscordUserI = {
                 _id:profile.id,
                 username: profile.username,
                 status: "success"
@@ -38,7 +51,7 @@ async (accessToken,refreshToken,profile,done)=>{
             done(null,user)
         }
         else {
-            const user = {
+            const user:DiscordUserI = {
                 _id:profile.id,
                 username: profile.username,
                 status: "failed"
@@ -47,7 +60,7 @@ async (accessToken,refreshToken,profile,done)=>{
         }
     } catch (err) {
         console.log(err);
-        done(err,null)
+        done(err,undefined)
     }
 }
 ))
