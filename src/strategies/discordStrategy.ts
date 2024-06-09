@@ -1,4 +1,3 @@
-// const {Strategy} = require('passport-discord')
 import {Strategy} from "passport-discord";
 import passport from "passport";
 import DiscordUserModel from '../models/discordUser.model'
@@ -7,14 +6,14 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 declare global {
-    namespace Express {
-      interface User {
-        _id: string;
-        username?: string;
-        status: string;
-        isRegistred?:boolean;
-      }
+  namespace Express {
+    interface User {
+      _id: string;
+      username?: string;
+      status: string;
+      isRegistred?: boolean;
     }
+  }
 }
 
 // interface User {

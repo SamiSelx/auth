@@ -23,8 +23,10 @@ const handleRegistre = async(req:Request,res:Response)=>{
 
         await userValidator.validateAsync(req.body)
         const newUser = await UserModel.create(req.body)
-        DiscordUserModel.findByIdAndUpdate(req.user?._id,{isRegistred:true}).then(updatedUser => console.log("user is updated :",updatedUser)
+        DiscordUserModel.findByIdAndUpdate(req.user?._id,{isRegistred:true}).
+        then(updatedUser => console.log("user is updated :",updatedUser)
         ).catch(err=>console.log("error update",err))   
+        
         const response:ResponseI = {status:"success",message:"data was successfully added",data:newUser}
         res.status(200).json(response)
     } catch (error) {

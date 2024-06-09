@@ -17,11 +17,7 @@ const clearSession =  async (req:Request,res:Response,next: NextFunction)=>{
         const deleteSession = await collection.deleteOne({_id:session?._id})
         console.log(deleteSession);
     }
-    console.log(req.user);
     
-    // const deleteSession = await collection.deleteOne({session: JSON.parse(res.session).passport.user == req.id}) we can do with regexp
-    // console.log("delete result : ",deleteSession);
-    // res.status(200).send(req.user)
     res.sendFile(path.join(__dirname,'../public/index.html'))
 }
 
