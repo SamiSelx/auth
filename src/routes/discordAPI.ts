@@ -1,15 +1,15 @@
-const express = require('express')
+import express, {Response,Request} from 'express'
+import passport from 'passport'
 const router = express.Router()
-const passport = require('passport')
 
-router.get('/',passport.authenticate('discord'),(req,res)=>{
+router.get('/',passport.authenticate('discord'),(req:Request,res:Response)=>{
     res.send(200)
 })
 
 router.get('/redirect',passport.authenticate('discord',{
     failureRedirect:'/',
     // successRedirect:'/registre'
-}),(req,res)=>{
+}),(req : Request,res: Response)=>{
     console.log("inside redirect",req.user);
     req.user?.status == "success" ? res.redirect('/registre') : res.redirect('/')
 
@@ -17,4 +17,6 @@ router.get('/redirect',passport.authenticate('discord',{
 
 })
 
-module.exports = router
+
+
+export default router
